@@ -5,10 +5,13 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import {CoreModule} from "./core/core.module";
+import { IssuesComponent } from './issues/issues.component';
+import {AuthGuardService} from "./Guards/auth-guard.service";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    IssuesComponent
   ],
   imports: [
     BrowserModule,
@@ -16,7 +19,7 @@ import {CoreModule} from "./core/core.module";
     HttpModule,
     CoreModule
   ],
-  providers: [],
+  providers: [AuthGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
