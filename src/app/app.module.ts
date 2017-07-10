@@ -7,19 +7,30 @@ import { AppComponent } from './app.component';
 import {CoreModule} from "./core/core.module";
 import { IssuesComponent } from './issues/issues.component';
 import {AuthGuardService} from "./Guards/auth-guard.service";
+import {IssueModule} from "./issues/issue.module";
+import {AppRoutingModule} from "./app-routing.module";
+import {AdalService} from "ng2-adal/core";
+import {SecretService} from "./services/secret.service";
+import {IssuesService} from "./services/issues.service";
 
 @NgModule({
   declarations: [
-    AppComponent,
-    IssuesComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
-    CoreModule
+    CoreModule,
+    AppRoutingModule,
+    IssueModule
   ],
-  providers: [AuthGuardService],
+  providers: [
+    AuthGuardService,
+    AdalService,
+    SecretService,
+    IssuesService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
