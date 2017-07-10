@@ -1,0 +1,43 @@
+  <div class="ui-widget-header">
+    <span class="fa fa-search"></span>
+    <input #gb type="text" pInputText size="50" placeholder="Global Filter">
+  </div>
+  <!--Table-->
+  <p-dataTable
+    [value]="issues"
+    [rows]="5"
+    [paginator]="true"
+    [pageLinks]="3"
+    [globalFilter]="gb"
+    [rowsPerPageOptions]="[5,10,20]"
+    [loading]="loading"
+    [style]="{'overflow':'visible'}"
+  >
+    <p-column field="personDtos" header="Company" [style]="{'width': '10%'}">
+      <ng-template let-col let-issue="rowData" let-ri="rowIndex" pTemplate="body">
+        <span>{{issue[col.field][0].companyName}}</span>
+      </ng-template>
+    </p-column>
+    <p-column field="description" filterMatchMode="contains" [style]="{'width':'50%'}"  header="Description">
+      <ng-template let-col let-issue="rowData" let-ri="rowIndex" pTemplate="body">
+        <span [innerHTML]="issue[col.field]"></span>
+      </ng-template>
+    </p-column>
+    <p-column field="category.description" header="Category" [style]="{'width': '15%'}"></p-column>
+    <p-column field="completionFlag" header="Completion" [style]="{'width': '15%'}">
+      <ng-template let-col let-issue="rowData" let-ri="rowIndex" pTemplate="body">
+      <span [ngSwitch]="issue[col.field]">
+        <p *ngSwitchCase="completionFlag.Closed">Closed</p>
+        <p *ngSwitchCase="completionFlag.Completed">Completed</p>
+        <p *ngSwitchCase="completionFlag.InProgress">In Progress</p>
+        <p *ngSwitchCase="completionFlag.NotCompleted">Not Completed</p>
+        <p *ngSwitchCase="completionFlag.NotResolved">Not Resolved</p>
+      </span>
+      </ng-template>
+    </p-column>
+    <p-column field="dateIssueRegistered" [style]="{'width': '10%'}" header="Date Issue Registered">
+      <ng-template let-col let-issue="rowData" let-ri="rowIndex" pTemplate="body">
+        <span>{{issue[col.field] | date: "dd/MM/yyyy"}}</span>
+      </ng-template>
+    </p-column>
+  </p-dataTable>

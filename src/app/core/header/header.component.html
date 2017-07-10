@@ -10,9 +10,9 @@
          Issues
        </a>
        <div class="dropdown-menu" aria-labelledby="navbarDropdownIssueLink">
-         <a href="#" class="dropdown-item">New Issue</a>
-         <a href="#" class="dropdown-item">All Issues</a>
-         <a href="#" class="dropdown-item">My Issues</a>
+         <a [routerLink]="['/newIssue']" class="dropdown-item">New Issue</a>
+         <a [routerLink]="['/dashboard']" class="dropdown-item">All Issues</a>
+         <a [routerLink]="['/myIssues']" class="dropdown-item">My Issues</a>
        </div>
      </li>
       <li class="nav-item"><a href="#" class="nav-link">Detailed Statistics</a></li>
