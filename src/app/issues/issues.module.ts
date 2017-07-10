@@ -2,15 +2,20 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {IssuesRoutingModule} from './issues-routing.module';
 import {IssuesComponent} from './issues.component';
-import {DataTableModule, MenubarModule} from "primeng/primeng";
+import {DataTableModule, DropdownModule, MenubarModule} from "primeng/primeng";
 import { IssueFormComponent } from './issue-form/issue-form.component';
+import {FormsModule} from "@angular/forms";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({
   imports: [
     CommonModule,
     IssuesRoutingModule,
     DataTableModule,
-    MenubarModule
+    MenubarModule,
+    DropdownModule,
+    FormsModule,
+    BrowserAnimationsModule
   ],
   declarations: [IssuesComponent, IssueFormComponent],
   exports: [

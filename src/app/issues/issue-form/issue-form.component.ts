@@ -1,5 +1,8 @@
 import {Component, OnInit} from "@angular/core";
-import {MenuItem} from "primeng/primeng";
+import {MenuItem, SelectItem} from "primeng/primeng";
+import {CompanyDto} from "../../Models/company-dto";
+import {CompanyService} from "../../services/company.service";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-issue-form',
@@ -9,11 +12,24 @@ import {MenuItem} from "primeng/primeng";
 export class IssueFormComponent implements OnInit {
 
   private items: Array<MenuItem>;
+  private users: Array<SelectItem> = [];
+  private companies: Array<SelectItem> = [];
+  private selectedCompany: string;
+  private selectedUser: string;
 
-  constructor() {
+
+  constructor(private companyService: CompanyService, private userService: UserService) {
   }
-
   ngOnInit() {
+    //populate companies to show on dropdown
+    this.companyService.allCompanies.then(companies => {
+      companies.forEach(c => {
+        this.companies.push({label: c.name, value: c.id})
+        if(c.name.toLowerCase().includes('presentation')){
+          this.selectedCompany = c.name
+        }
+      });
+    });
     this.items = [
       {
         label: 'Email Functions',
@@ -45,6 +61,14 @@ export class IssueFormComponent implements OnInit {
         ]
       }
     ];
+  }
+  getUsers(event): void {
+    this.userService.getAllUsersForCompany(event.value).then(c =>{
+      this.users = [];
+      c.personDtos.forEach(person => {
+        this.users.push({label: `${person.firstName} ${person.lastName} (${person.email})`, value: person.id})
+      });
+    });
   }
 
 }

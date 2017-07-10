@@ -12,6 +12,8 @@ import {AppRoutingModule} from './app-routing.module';
 import {IssuesRoutingModule} from './issues/issues-routing.module';
 import {AdalService} from 'ng2-adal/core';
 import {IssuesModule} from "./issues/issues.module";
+import {CompanyService} from "./services/company.service";
+import {UserService} from "./services/user.service";
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import {IssuesModule} from "./issues/issues.module";
     AuthGuardService,
     SecretService,
     IssuesService,
-    AdalService
+    AdalService,
+    CompanyService,
+    UserService
   ],
   bootstrap: [AppComponent]
 })
