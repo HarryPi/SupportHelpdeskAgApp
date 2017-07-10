@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {IssuesService} from "../services/issues.service";
-import {IssueDto} from "../Models/issue-dto";
+import {IssuesService} from '../services/issues.service';
+import {IssueDto} from '../Models/issue-dto';
+import {CompletionFlag} from "../Models/completion-flag.enum";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-issues',
@@ -9,17 +11,25 @@ import {IssueDto} from "../Models/issue-dto";
 })
 export class IssuesComponent implements OnInit {
 
-  issues: IssueDto[];
-  loading: boolean;
-  constructor(private issueService: IssuesService) { }
+  issues: IssueDto[] = [];
+  loading = false;
+  completionFlag = CompletionFlag;
+  constructor(private issueService: IssuesService, private router: Router) {
+  }
 
   ngOnInit() {
     this.loading = true;
-    this.issueService.allOngoingIssues.then(issues => {
-      this.issues = issues;
-      this.loading = false;
-      console.log(issues);
-    });
+    if (this.router.url.includes('dashboard')) {
+      this.issueService.onGoingIssues.then(issues => {
+        this.issues = issues;
+        this.loading = false;
+      });
+    } else if (this.router.url.includes('myIssues')) {
+      this.issueService.myIssues.then(issues => {
+        this.issues = issues;
+        this.loading = false;
+      });
+    }
   }
 
 }
