@@ -8,7 +8,7 @@ export class CompanyService {
 
   constructor(private http: Http, private adalService: AdalService) { }
 
-  get allCompanies(): Promise<Array<CompanyDto>> {
+  get getAllCompanies(): Promise<Array<CompanyDto>> {
     return this.http.get('https://helpdesk.presentationsolutions.eu/api/companies', {
       headers: new Headers({'Authorization': `Bearer ${this.adalService.getCachedToken(this.adalService.config.clientId)}`})
     }).toPromise()

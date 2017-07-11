@@ -40,5 +40,55 @@
         ></p-dropdown>
       </div>
     </div>
+    <div class="ui-g-12">
+      <div class="ui-g-4">Category<span class="fa fa-asterisk"></span></div>
+      <div class="ui-g-8">
+        <p-dropdown class="ui-g-12"
+                    [options]="categories"
+                    [(ngModel)]="selectedCategory"
+                    [filter]="true"
+                    [required]="true"
+                    [style]="{'width': '100%'}"
+        ></p-dropdown>
+      </div>
+    </div>
+  </div>
+  <div class="ui-g-6">
+    <div class="ui-g-12">
+      <div class="ui-g-4">Assigned User<span class="fa fa-asterisk"></span></div>
+      <div class="ui-g-8">
+        <p-dropdown class="ui-g-12"
+                    [options]="psUsers"
+                    [(ngModel)]="selectedPsUser"
+                    [filter]="true"
+                    [required]="true"
+                    [style]="{'width': '100%'}"
+        ></p-dropdown>
+      </div>
+    </div>
+    <div class="ui-g-12">
+      <div class="ui-g-4">Application<span class="fa fa-asterisk"></span></div>
+      <div class="ui-g-8">
+        <p-dropdown class="ui-g-12"
+                    [options]="pslApplications"
+                    [(ngModel)]="selectedPslApplication"
+                    [filter]="true"
+                    [required]="true"
+                    [style]="{'width': '100%'}"
+        ></p-dropdown>
+      </div>
+    </div>
+    <div class="ui-g-12">
+      <div class="ui-g-4">Urgency State<span class="fa fa-asterisk"></span></div>
+      <div class="ui-g-8">
+        <p-dropdown class="ui-g-12"
+                    [options]="urgencyStates"
+                    [(ngModel)]="selectedUrgencyState"
+                    [filter]="true"
+                    [required]="true"
+                    [style]="{'width': '100%'}"
+        ></p-dropdown>
+      </div>
+    </div>
   </div>
 </div>

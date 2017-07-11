@@ -14,6 +14,9 @@ import {AdalService} from 'ng2-adal/core';
 import {IssuesModule} from "./issues/issues.module";
 import {CompanyService} from "./services/company.service";
 import {UserService} from "./services/user.service";
+import {CategoryService} from "./services/category.service";
+import {AuthService} from "./services/auth.service";
+import {ApplicationService} from "./services/application.service";
 
 @NgModule({
   declarations: [
@@ -34,7 +37,10 @@ import {UserService} from "./services/user.service";
     IssuesService,
     AdalService,
     CompanyService,
-    UserService
+    UserService,
+    CategoryService,
+    AuthService,
+    ApplicationService
   ],
   bootstrap: [AppComponent]
 })

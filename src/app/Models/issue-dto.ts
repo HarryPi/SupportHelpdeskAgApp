@@ -1,10 +1,11 @@
-import {PslApplicationDto} from "./psl-application-dto";
-import {SolutionDto} from "./solution-dto";
-import {PsUserDto} from "./ps-user-dto";
-import {EmailDto} from "./email-dto";
-import {IssueCategoryDto} from "./issue-category-dto";
-import {PersonDto} from "./person-dto";
-import {IssueTagsDto} from "./issue-tags-dto";
+import {PslApplicationDto} from './psl-application-dto';
+import {SolutionDto} from './solution-dto';
+import {PsUserDto} from './ps-user-dto';
+import {EmailDto} from './email-dto';
+import {IssueCategoryDto} from './issue-category-dto';
+import {PersonDto} from './person-dto';
+import {IssueTagsDto} from './issue-tags-dto';
+import {CompletionFlag} from './completion-flag.enum';
 
 export class IssueDto {
   id: number;
@@ -14,7 +15,7 @@ export class IssueDto {
   applicationName: Array<string>;
   attachedFiles: Array<string>;
   urgencyFlag: number;
-  completionFlag: number;
+  completionFlag: CompletionFlag;
   completionDuration: number;
 
 
