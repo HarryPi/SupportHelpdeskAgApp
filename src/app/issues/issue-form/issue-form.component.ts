@@ -1,8 +1,9 @@
-import {Component, OnInit} from "@angular/core";
-import {MenuItem, SelectItem} from "primeng/primeng";
-import {CompanyDto} from "../../Models/company-dto";
-import {CompanyService} from "../../services/company.service";
-import {UserService} from "../../services/user.service";
+import {Component, OnInit} from '@angular/core';
+import {MenuItem, SelectItem} from 'primeng/primeng';
+import {CompanyDto} from '../../Models/company-dto';
+import {CompanyService} from '../../services/company.service';
+import {UserService} from '../../services/user.service';
+import {CompletionFlag} from "../../Models/completion-flag.enum";
 
 @Component({
   selector: 'app-issue-form',
@@ -12,21 +13,28 @@ import {UserService} from "../../services/user.service";
 export class IssueFormComponent implements OnInit {
 
   private items: Array<MenuItem>;
+
   private users: Array<SelectItem> = [];
   private companies: Array<SelectItem> = [];
+  private completionFlags: Array<SelectItem>;
+
   private selectedCompany: string;
   private selectedUser: string;
-
+  private completionFlag: string;
 
   constructor(private companyService: CompanyService, private userService: UserService) {
   }
   ngOnInit() {
-    //populate companies to show on dropdown
+
+    for (let flag in CompletionFlag) {
+
+    };
+    // populate companies to show on dropdown
     this.companyService.allCompanies.then(companies => {
       companies.forEach(c => {
-        this.companies.push({label: c.name, value: c.id})
-        if(c.name.toLowerCase().includes('presentation')){
-          this.selectedCompany = c.name
+        this.companies.push({label: c.name, value: c.id});
+        if (c.name.toLowerCase().includes('presentation')){
+          this.selectedCompany = c.name;
         }
       });
     });
@@ -63,10 +71,10 @@ export class IssueFormComponent implements OnInit {
     ];
   }
   getUsers(event): void {
-    this.userService.getAllUsersForCompany(event.value).then(c =>{
+    this.userService.getAllUsersForCompany(event.value).then(c => {
       this.users = [];
       c.personDtos.forEach(person => {
-        this.users.push({label: `${person.firstName} ${person.lastName} (${person.email})`, value: person.id})
+        this.users.push({label: `${person.firstName} ${person.lastName} (${person.email})`, value: person.id});
       });
     });
   }

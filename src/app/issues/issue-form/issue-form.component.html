@@ -16,17 +16,29 @@
         ></p-dropdown>
       </div>
     </div>
-  <div class="ui-g-12">
-    <div class="ui-g-4">User Email<span class="fa fa-asterisk"></span></div>
-    <div class="ui-g-8">
-      <p-dropdown class="ui-g-12"
-                  [options]="users"
-                  [(ngModel)]="selectedUser"
-                  [filter]="true"
-                  [required]="true"
-                  [style]="{'width': '100%'}"
-      ></p-dropdown>
+    <div class="ui-g-12">
+      <div class="ui-g-4">User Email<span class="fa fa-asterisk"></span></div>
+      <div class="ui-g-8">
+        <p-dropdown class="ui-g-12"
+                    [options]="users"
+                    [(ngModel)]="selectedUser"
+                    [filter]="true"
+                    [required]="true"
+                    [style]="{'width': '100%'}"
+        ></p-dropdown>
+      </div>
+    </div>
+    <div class="ui-g-12">
+      <div class="ui-g-4">Completion Flag<span class="fa fa-asterisk"></span></div>
+      <div class="ui-g-8">
+        <p-dropdown class="ui-g-12"
+                    [options]="completionFlags"
+                    [(ngModel)]="completionFlag"
+                    [filter]="true"
+                    [required]="true"
+                    [style]="{'width': '100%'}"
+        ></p-dropdown>
+      </div>
+    </div>
   </div>
-  </div>
-</div>
 </div>
