@@ -1,27 +1,39 @@
-import { Injectable } from '@angular/core';
-import {Http, Headers} from '@angular/http';
-import {AdalService} from 'ng2-adal/core';
-import 'rxjs/add/operator/toPromise';
-import {IssueDto} from '../Models/issue-dto';
+import {Injectable} from "@angular/core";
+import {Headers, Http} from "@angular/http";
+import "rxjs/add/operator/toPromise";
+import {IssueDto} from "../Models/issue-dto";
+import {AuthService} from "./auth.service";
+import {AdalService} from "ng2-adal/core";
+import {Subject} from "rxjs/Subject";
 
 @Injectable()
 export class IssuesService {
+  private issueSubject: Subject<IssueDto[]> = new Subject();
 
-  constructor(private http: Http, private adalService: AdalService) { }
-
-  get onGoingIssues(): Promise<Array<IssueDto>> {
-    return this.http.get('https://helpdesk.presentationsolutions.eu/api/Issues/GetIssuesByFlag/32', {
-      headers: new Headers({'Authorization': 'Bearer ' + this.adalService.getCachedToken(this.adalService.config.clientId)})
-    })
-      .toPromise()
-      .then(res => { return <IssueDto[]>res.json(); });
+  constructor(private http: Http, private authService: AuthService, private adalService: AdalService) {
   }
-  get myIssues(): Promise<Array<IssueDto>> {
-    return this.http.
-    get(`https://helpdesk.presentationsolutions.eu/api/Issues/GetIssuesByFlag/32?psUserEmail=${this.adalService.userInfo.userName}`, {
-      headers: new Headers({'Authorization': 'Bearer ' + this.adalService.getCachedToken(this.adalService.config.clientId)})
-    })
-      .toPromise()
-      .then(res => { return <IssueDto[]>res.json(); });
+
+  public onGoingIssues(): Subject<IssueDto[]> {
+    this.authService.getToken().toPromise().then(t => {
+      this.http.get('https://helpdesk.presentationsolutions.eu/api/Issues/GetIssuesByFlag/32', {
+        headers: new Headers({'Authorization': `Bearer ${t.toString()}`})
+      }).toPromise()
+        .then(res => {
+          this.issueSubject.next(res.json());
+        });
+    });
+    return this.issueSubject;
+  }
+
+  public myIssues(): Subject<IssueDto[]> {
+    this.authService.getToken().toPromise().then(t => {
+      this.http.get(`https://helpdesk.presentationsolutions.eu/api/Issues/GetIssuesByFlag/32?psUserEmail=${this.adalService.userInfo.userName}`, {
+        headers: new Headers({'Authorization': `Bearer ${t.toString()}`})
+      }).toPromise()
+        .then(res => {
+          this.issueSubject.next(res.json());
+        });
+    });
+    return this.issueSubject;
   }
 }

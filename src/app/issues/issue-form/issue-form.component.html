@@ -19,13 +19,14 @@
     <div class="ui-g-12">
       <div class="ui-g-4">User Email<span class="fa fa-asterisk"></span></div>
       <div class="ui-g-8">
-        <p-dropdown class="ui-g-12"
-                    [options]="users"
-                    [(ngModel)]="selectedUser"
-                    [filter]="true"
-                    [required]="true"
-                    [style]="{'width': '100%'}"
-        ></p-dropdown>
+        <p-multiSelect class="ui-g-12"
+                       [options]="users"
+                       [(ngModel)]="selectedUser"
+                       [filter]="true"
+                       [required]="true"
+                       [style]="{'width': '100%'}"
+                       placeholder="Select users"
+        ></p-multiSelect>
       </div>
     </div>
     <div class="ui-g-12">
@@ -52,6 +53,15 @@
         ></p-dropdown>
       </div>
     </div>
+    <div class="ui-g-12">
+      <div class="ui-g-4">Description<span class="fa fa-asterisk"></span></div>
+      <br>
+      <br>
+      <div #description>
+
+      </div>
+    </div>
+
   </div>
   <div class="ui-g-6">
     <div class="ui-g-12">
@@ -69,9 +79,21 @@
     <div class="ui-g-12">
       <div class="ui-g-4">Application<span class="fa fa-asterisk"></span></div>
       <div class="ui-g-8">
+        <p-multiSelect class="ui-g-12"
+                       [options]="pslApplications"
+                       [(ngModel)]="selectedPslApplication"
+                       [filter]="true"
+                       [required]="true"
+                       [style]="{'width': '100%'}"
+        ></p-multiSelect>
+      </div>
+    </div>
+    <div class="ui-g-12">
+      <div class="ui-g-4">Urgency State<span class="fa fa-asterisk"></span></div>
+      <div class="ui-g-8">
         <p-dropdown class="ui-g-12"
-                    [options]="pslApplications"
-                    [(ngModel)]="selectedPslApplication"
+                    [options]="urgnecyFlags"
+                    [(ngModel)]="selectedUrgencyFlag"
                     [filter]="true"
                     [required]="true"
                     [style]="{'width': '100%'}"
@@ -79,16 +101,24 @@
       </div>
     </div>
     <div class="ui-g-12">
-      <div class="ui-g-4">Urgency State<span class="fa fa-asterisk"></span></div>
+      <div class="ui-g-4">Stock Responses<span class="fa fa-asterisk"></span></div>
       <div class="ui-g-8">
         <p-dropdown class="ui-g-12"
-                    [options]="urgencyStates"
-                    [(ngModel)]="selectedUrgencyState"
+                    [options]="stockResponses"
+                    [(ngModel)]="selectedStockResponse"
                     [filter]="true"
                     [required]="true"
                     [style]="{'width': '100%'}"
+                    placeholder="Select a stock response"
         ></p-dropdown>
       </div>
     </div>
-  </div>
+    <div class="ui-g-12">
+      <div class="ui-g-4">Solution<span class="fa fa-asterisk"></span></div>
+      <br>
+      <br>
+      <div #solution>
+
+      </div>
+    </div>
 </div>
