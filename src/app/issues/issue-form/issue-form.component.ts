@@ -140,13 +140,16 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
       }
     ];
   }
-  getUsers(event): void {
+  private getUsers(event): void {
     this.userService.getAllUsersForCompany(event.value).subscribe(c => {
       this.users = [];
       c.personDtos.forEach(person => {
         this.users.push({label: `${person.firstName} ${person.lastName} (${person.email})`, value: person.id});
       });
     });
+  }
+  private uploadBlob(event) {
+    console.log(event.files);
   }
 
 }

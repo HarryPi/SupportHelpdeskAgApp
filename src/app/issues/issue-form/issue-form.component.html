@@ -61,6 +61,14 @@
 
       </div>
     </div>
+    <div class="ui-g-12">
+      <div class="ui-g-4">Upload related files</div>
+      <br>
+      <br>
+      <p-fileUpload multiple="multiple" auto="true" name="relevantFiles[]" customUpload="true" (uploadHandler)="uploadBlob($event)">
+
+      </p-fileUpload>
+    </div>
 
   </div>
   <div class="ui-g-6">
@@ -121,4 +129,5 @@
 
       </div>
     </div>
+  </div>
 </div>
