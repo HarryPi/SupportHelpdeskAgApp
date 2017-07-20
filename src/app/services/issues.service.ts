@@ -9,14 +9,21 @@ import {Subject} from "rxjs/Subject";
 @Injectable()
 export class IssuesService {
   private issueSubject: Subject<IssueDto[]> = new Subject();
-
+  private baseUrl: string = "http://helpdeskapiservice.azurewebsites.net/api";
   constructor(private http: Http, private authService: AuthService, private adalService: AdalService) {
   }
 
   public onGoingIssues(): Subject<IssueDto[]> {
+
     this.authService.getToken().toPromise().then(t => {
-      this.http.get('https://helpdesk.presentationsolutions.eu/api/Issues/GetIssuesByFlag/32', {
-        headers: new Headers({'Authorization': `Bearer ${t.toString()}`})
+
+      let headers = new Headers();
+      headers.append('Authorization', `Bearer ${t.toString()}`);
+      headers.append('Content-Type', 'application/json');
+      headers.append('Accept', 'application/json');
+
+      this.http.get(`${this.baseUrl}/v1/issues`, {
+        headers: headers
       }).toPromise()
         .then(res => {
           this.issueSubject.next(res.json());
@@ -27,7 +34,7 @@ export class IssuesService {
 
   public myIssues(): Subject<IssueDto[]> {
     this.authService.getToken().toPromise().then(t => {
-      this.http.get(`https://helpdesk.presentationsolutions.eu/api/Issues/GetIssuesByFlag/32?psUserEmail=${this.adalService.userInfo.userName}`, {
+      this.http.get(`https://helpdesk.presentationsolutions.euapi/Issues/GetIssuesByFlag/32?psUserEmail=${this.adalService.userInfo.userName}`, {
         headers: new Headers({'Authorization': `Bearer ${t.toString()}`})
       }).toPromise()
         .then(res => {

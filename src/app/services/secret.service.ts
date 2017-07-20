@@ -7,7 +7,7 @@ export class SecretService {
   public get adalConfig(): any {
     return {
       tenant: 'presentationsolutions.eu',
-      clientId: '602b7808-ff84-484a-9037-a84233f88208',
+      clientId: '930cdbae-12b8-409d-94c8-8e64ed1f2254',
       redirectUri: window.location.origin + '/',
       postLogoutRedirectUri: window.location.origin + '/'
     };

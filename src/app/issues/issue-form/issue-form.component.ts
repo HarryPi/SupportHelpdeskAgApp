@@ -7,6 +7,9 @@ import {CategoryService} from "../../services/category.service";
 import {ApplicationService} from "../../services/application.service";
 import {UrgencyFlag} from "../../Models/urgency-flag.enum";
 import * as Quill from "quill";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {IssueDto} from "../../Models/issue-dto";
+import {IssueCategoryDto} from "../../Models/issue-category-dto";
 
 @Component({
   selector: 'app-issue-form',
@@ -41,11 +44,48 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
   private descriptionEditor: Quill.Quill;
   private solutionEditor: Quill.Quill;
 
+  private issueForm: FormGroup;
+
   constructor(private categoryService: CategoryService,
               private companyService: CompanyService,
               private userService: UserService,
-              private appService: ApplicationService
-  ) {}
+              private appService: ApplicationService,
+              private fb: FormBuilder
+  ) {
+    this.issueForm = this.fb.group({
+      applicationName: this.fb.array([]),
+      attachedFiles: this.fb.array([]),
+      category: this.fb.group({
+        id: ['', Validators.required],
+      }),
+      companyId: ['', Validators.required],
+      description: ['', Validators.required],
+      emailDto: this.fb.group({
+        emailBody: '',
+        sendEmail: false,
+        userNames: this.fb.array([]),
+        users: this.fb.array([])
+      }),
+      issueTags: this.fb.array([this.fb.group({
+        id: ''
+      })]),
+      personsDtos: this.fb.array([this.fb.group({
+        email: '',
+        firstName: '',
+        id: ''
+      })]),
+      personId: this.fb.array([]),
+      psUser: this.fb.group({
+        id: ''
+      }),
+      pslApplicationDto: this.fb.array([]),
+      solutionDto: this.fb.group({
+        categoryId: '',
+        text: ''
+      }),
+      urgencyFlag: ''
+    });
+  }
 
   ngAfterViewInit(): void {
     this.descriptionEditor = new Quill(this.descriptionEl.nativeElement, {

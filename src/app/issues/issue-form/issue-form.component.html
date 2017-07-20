@@ -1,6 +1,6 @@
 <p-menubar [model]="items"></p-menubar>
 
-<div class="ui-g">
+<div class="ui-g" [formGroup]="issueForm">
   <div class="ui-g-6">
     <div class="ui-g-12">
       <div class="ui-g-4">Company<span class="fa fa-asterisk"></span></div>
@@ -12,21 +12,23 @@
                     [required]="true"
                     [style]="{'width': '100%'}"
                     (onChange)="getUsers($event)"
-
+                    formControlName="companyId"
         ></p-dropdown>
       </div>
     </div>
     <div class="ui-g-12">
       <div class="ui-g-4">User Email<span class="fa fa-asterisk"></span></div>
-      <div class="ui-g-8">
-        <p-multiSelect class="ui-g-12"
-                       [options]="users"
-                       [(ngModel)]="selectedUser"
-                       [filter]="true"
-                       [required]="true"
-                       [style]="{'width': '100%'}"
-                       placeholder="Select users"
-        ></p-multiSelect>
+      <div class="ui-g-8" formArrayName="personDtos">
+        <div>
+          <p-multiSelect class="ui-g-12"
+                         [options]="users"
+                         [(ngModel)]="selectedUser"
+                         [filter]="true"
+                         [required]="true"
+                         [style]="{'width': '100%'}"
+                         placeholder="Select users"
+          ></p-multiSelect>
+        </div>
       </div>
     </div>
     <div class="ui-g-12">
@@ -65,7 +67,7 @@
       <div class="ui-g-4">Upload related files</div>
       <br>
       <br>
-      <p-fileUpload multiple="multiple" auto="true" name="relevantFiles[]" customUpload="true" (uploadHandler)="uploadBlob($event)">
+      <p-fileUpload multiple="multiple"  name="relevantFiles[]" customUpload="true" (uploadHandler)="uploadBlob($event)">
 
       </p-fileUpload>
     </div>
@@ -129,5 +131,14 @@
 
       </div>
     </div>
+    <div class="ui-g-12">
+      <div class="ui-g-4">Upload related files</div>
+      <br>
+      <br>
+      <p-fileUpload multiple="multiple"  name="attachments[]" customUpload="true" (uploadHandler)="uploadBlob($event)">
+
+      </p-fileUpload>
+    </div>
   </div>
+  <button class="btn btn-primary">Submit</button>
 </div>
