@@ -1,22 +1,22 @@
 import {Injectable} from "@angular/core";
 import {Headers, Http} from "@angular/http";
-import {CompanyDto} from "../Models/company-dto";
 import {PsUserDto} from "../Models/ps-user-dto";
 import {AuthService} from "./auth.service";
 import {Subject} from "rxjs/Subject";
+import {PersonDto} from "../Models/person-dto";
 
 
 @Injectable()
 export class UserService {
   private userSubject: Subject<PsUserDto[]> = new Subject();
-  private companySubject: Subject<CompanyDto> = new Subject();
-
+  private companySubject: Subject<PersonDto[]> = new Subject();
+  private readonly baseUrl = 'https://localhost:44318/api';
   constructor(private http: Http, private authService: AuthService) {
   }
 
-  public getAllUsersForCompany(companyId: number): Subject<CompanyDto> {
+  public getAllUsersForCompany(companyId: number): Subject<PersonDto[]> {
     this.authService.getToken().toPromise().then(t => {
-      this.http.get('https://helpdesk.presentationsolutions.eu/api/companies/' + companyId, {
+      this.http.get( this.baseUrl + '/v1/users/' + companyId, {
         headers: new Headers({'Authorization': `Bearer ${t.toString()}`})
       }).toPromise()
         .then(res => {
@@ -28,7 +28,7 @@ export class UserService {
 
   public getAllPsUsers(): Subject<PsUserDto[]> {
     this.authService.getToken().toPromise().then(t => {
-      this.http.get('https://helpdesk.presentationsolutions.eu/api/psUsers',
+      this.http.get(`${this.baseUrl}/v1/psUsers`,
         {headers: new Headers({'Authorization': `Bearer ${t.toString()}`})}
       ).toPromise()
         .then(res => {

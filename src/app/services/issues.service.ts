@@ -1,15 +1,15 @@
-import {Injectable} from "@angular/core";
-import {Headers, Http} from "@angular/http";
-import "rxjs/add/operator/toPromise";
-import {IssueDto} from "../Models/issue-dto";
-import {AuthService} from "./auth.service";
-import {AdalService} from "ng2-adal/core";
-import {Subject} from "rxjs/Subject";
+import {Injectable} from '@angular/core';
+import {Headers, Http} from '@angular/http';
+import 'rxjs/add/operator/toPromise';
+import {IssueDto} from '../Models/issue-dto';
+import {AuthService} from './auth.service';
+import {AdalService} from 'ng2-adal/core';
+import {Subject} from 'rxjs/Subject';
 
 @Injectable()
 export class IssuesService {
   private issueSubject: Subject<IssueDto[]> = new Subject();
-  private baseUrl: string = "http://helpdeskapiservice.azurewebsites.net/api";
+  private baseUrl = 'https://localhost:44318/api';
   constructor(private http: Http, private authService: AuthService, private adalService: AdalService) {
   }
 
@@ -17,10 +17,8 @@ export class IssuesService {
 
     this.authService.getToken().toPromise().then(t => {
 
-      let headers = new Headers();
+      const headers = new Headers();
       headers.append('Authorization', `Bearer ${t.toString()}`);
-      headers.append('Content-Type', 'application/json');
-      headers.append('Accept', 'application/json');
 
       this.http.get(`${this.baseUrl}/v1/issues`, {
         headers: headers

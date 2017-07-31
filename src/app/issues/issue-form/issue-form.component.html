@@ -7,26 +7,25 @@
       <div class="ui-g-8">
         <p-dropdown class="ui-g-12"
                     [options]="companies"
-                    [(ngModel)]="selectedCompany"
                     [filter]="true"
                     [required]="true"
+                    [(ngModel)]="selectedCompany"
                     [style]="{'width': '100%'}"
                     (onChange)="getUsers($event)"
-                    formControlName="companyId"
+                    formControlName= "companyId"
         ></p-dropdown>
       </div>
     </div>
     <div class="ui-g-12">
       <div class="ui-g-4">User Email<span class="fa fa-asterisk"></span></div>
-      <div class="ui-g-8" formArrayName="personDtos">
+      <div class="ui-g-8">
         <div>
           <p-multiSelect class="ui-g-12"
                          [options]="users"
-                         [(ngModel)]="selectedUser"
                          [filter]="true"
-                         [required]="true"
                          [style]="{'width': '100%'}"
                          placeholder="Select users"
+                         formControlName="usersId"
           ></p-multiSelect>
         </div>
       </div>
@@ -36,10 +35,10 @@
       <div class="ui-g-8">
         <p-dropdown class="ui-g-12"
                     [options]="completionFlags"
-                    [(ngModel)]="completionFlag"
                     [filter]="true"
                     [required]="true"
                     [style]="{'width': '100%'}"
+                    formControlName="completionFlag"
         ></p-dropdown>
       </div>
     </div>
@@ -48,15 +47,16 @@
       <div class="ui-g-8">
         <p-dropdown class="ui-g-12"
                     [options]="categories"
-                    [(ngModel)]="selectedCategory"
                     [filter]="true"
                     [required]="true"
                     [style]="{'width': '100%'}"
+                    formControlName="categoryId"
+                    (onChange)="categoryChange($event)"
         ></p-dropdown>
       </div>
     </div>
     <div class="ui-g-12">
-      <div class="ui-g-4">Description<span class="fa fa-asterisk"></span></div>
+      <div class="ui-g-4">Description<span class="fa fa-asterisk" ></span></div>
       <br>
       <br>
       <div #description>
@@ -67,7 +67,7 @@
       <div class="ui-g-4">Upload related files</div>
       <br>
       <br>
-      <p-fileUpload multiple="multiple"  name="relevantFiles[]" customUpload="true" (uploadHandler)="uploadBlob($event)">
+      <p-fileUpload multiple="multiple"  name="relevantFiles[]" [showUploadButton]="false" customUpload="true" (uploadHandler)="uploadBlob($event)">
 
       </p-fileUpload>
     </div>
@@ -75,26 +75,25 @@
   </div>
   <div class="ui-g-6">
     <div class="ui-g-12">
-      <div class="ui-g-4">Assigned User<span class="fa fa-asterisk"></span></div>
+      <div class="ui-g-4">Assigned User<span class="fa fa-asterisk" ></span></div>
       <div class="ui-g-8">
         <p-dropdown class="ui-g-12"
                     [options]="psUsers"
-                    [(ngModel)]="selectedPsUser"
                     [filter]="true"
                     [required]="true"
                     [style]="{'width': '100%'}"
+                    formControlName="psUser"
         ></p-dropdown>
       </div>
     </div>
     <div class="ui-g-12">
-      <div class="ui-g-4">Application<span class="fa fa-asterisk"></span></div>
+      <div class="ui-g-4">Application<span class="fa fa-asterisk" ></span></div>
       <div class="ui-g-8">
         <p-multiSelect class="ui-g-12"
                        [options]="pslApplications"
-                       [(ngModel)]="selectedPslApplication"
                        [filter]="true"
-                       [required]="true"
                        [style]="{'width': '100%'}"
+                       formControlName="applications"
         ></p-multiSelect>
       </div>
     </div>
@@ -103,10 +102,10 @@
       <div class="ui-g-8">
         <p-dropdown class="ui-g-12"
                     [options]="urgnecyFlags"
-                    [(ngModel)]="selectedUrgencyFlag"
                     [filter]="true"
                     [required]="true"
                     [style]="{'width': '100%'}"
+                    formControlName="urgencyState"
         ></p-dropdown>
       </div>
     </div>
@@ -115,30 +114,31 @@
       <div class="ui-g-8">
         <p-dropdown class="ui-g-12"
                     [options]="stockResponses"
-                    [(ngModel)]="selectedStockResponse"
                     [filter]="true"
                     [required]="true"
                     [style]="{'width': '100%'}"
                     placeholder="Select a stock response"
+                    (onChange)="stockResponseCheck($event)"
+
         ></p-dropdown>
       </div>
     </div>
     <div class="ui-g-12">
-      <div class="ui-g-4">Solution<span class="fa fa-asterisk"></span></div>
+      <div class="ui-g-4">Solution<span class="fa fa-asterisk" ></span></div>
       <br>
       <br>
-      <div #solution>
+      <div #solution >
 
       </div>
     </div>
     <div class="ui-g-12">
-      <div class="ui-g-4">Upload related files</div>
+      <div class="ui-g-4">Email attachments</div>
       <br>
       <br>
-      <p-fileUpload multiple="multiple"  name="attachments[]" customUpload="true" (uploadHandler)="uploadBlob($event)">
+      <p-fileUpload #emailAttachments multiple="multiple"  name="attachments[]" [showUploadButton]="false" customUpload="true" (uploadHandler)="uploadBlob($event)">
 
       </p-fileUpload>
     </div>
   </div>
-  <button class="btn btn-primary">Submit</button>
+  <button (click)="submitForm()" class="btn btn-primary">Submit</button>
 </div>

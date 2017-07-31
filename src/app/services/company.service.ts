@@ -7,13 +7,14 @@ import {Subject} from "rxjs/Subject";
 @Injectable()
 export class CompanyService {
   private companySubject: Subject<CompanyDto[]> = new Subject();
+  private readonly baseUrl = 'https://localhost:44318/api';
 
   constructor(private http: Http, private authService: AuthService) {
   }
 
   public getAllCompanies(): Subject<CompanyDto[]> {
     this.authService.getToken().toPromise().then(t => {
-      this.http.get('https://helpdesk.presentationsolutions.eu/api/companies', {
+      this.http.get(`${this.baseUrl}/v1/companies`, {
         headers: new Headers({'Authorization': `Bearer ${t.toString()}`})
       }).toPromise()
         .then(res => {

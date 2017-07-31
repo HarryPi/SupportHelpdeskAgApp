@@ -1,15 +1,16 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from "@angular/core";
-import {MenuItem, SelectItem} from "primeng/primeng";
-import {CompanyService} from "../../services/company.service";
-import {UserService} from "../../services/user.service";
-import {CompletionFlag} from "../../Models/completion-flag.enum";
-import {CategoryService} from "../../services/category.service";
-import {ApplicationService} from "../../services/application.service";
-import {UrgencyFlag} from "../../Models/urgency-flag.enum";
-import * as Quill from "quill";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {IssueDto} from "../../Models/issue-dto";
-import {IssueCategoryDto} from "../../Models/issue-category-dto";
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {MenuItem, SelectItem} from 'primeng/primeng';
+import {CompanyService} from '../../services/company.service';
+import {UserService} from '../../services/user.service';
+import {CompletionFlag} from '../../Models/completion-flag.enum';
+import {CategoryService} from '../../services/category.service';
+import {ApplicationService} from '../../services/application.service';
+import {UrgencyFlag} from '../../Models/urgency-flag.enum';
+import * as Quill from 'quill';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {SolutionsService} from '../../services/solutions.service';
+import {SolutionDto} from '../../Models/solution-dto';
+import {FileUpload} from "primeng/components/fileupload/fileupload";
 
 @Component({
   selector: 'app-issue-form',
@@ -21,6 +22,9 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
 
   @ViewChild('description') descriptionEl: ElementRef;
   @ViewChild('solution') solutionEl: ElementRef;
+  @ViewChild('emailAttachments') emailAttachmentEl: FileUpload;
+
+  private solutionsForCurrentCategory: SolutionDto[] = [];
 
   private items: Array<MenuItem>;
   private users: Array<SelectItem> = [];
@@ -50,40 +54,19 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
               private companyService: CompanyService,
               private userService: UserService,
               private appService: ApplicationService,
-              private fb: FormBuilder
-  ) {
+              private solutionsService: SolutionsService,
+              private fb: FormBuilder) {
     this.issueForm = this.fb.group({
-      applicationName: this.fb.array([]),
-      attachedFiles: this.fb.array([]),
-      category: this.fb.group({
-        id: ['', Validators.required],
-      }),
-      companyId: ['', Validators.required],
-      description: ['', Validators.required],
-      emailDto: this.fb.group({
-        emailBody: '',
-        sendEmail: false,
-        userNames: this.fb.array([]),
-        users: this.fb.array([])
-      }),
-      issueTags: this.fb.array([this.fb.group({
-        id: ''
-      })]),
-      personsDtos: this.fb.array([this.fb.group({
-        email: '',
-        firstName: '',
-        id: ''
-      })]),
-      personId: this.fb.array([]),
-      psUser: this.fb.group({
-        id: ''
-      }),
-      pslApplicationDto: this.fb.array([]),
-      solutionDto: this.fb.group({
-        categoryId: '',
-        text: ''
-      }),
-      urgencyFlag: ''
+      companyId: this.fb.control([]),
+      usersId: this.fb.control([]),
+      completionFlag: this.fb.control([]),
+      categoryId: this.fb.control([]),
+      psUser: this.fb.control([]),
+      applications: this.fb.control([]),
+      urgencyState: this.fb.control([]),
+      isStockResponse: '',
+      description: '',
+      solution: ''
     });
   }
 
@@ -94,8 +77,21 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
     this.solutionEditor = new Quill(this.solutionEl.nativeElement, {
       theme: 'snow'
     });
+
+    this.solutionEditor.on('text-change', () => {
+      this.issueForm.patchValue({
+        solution : this.solutionEl.nativeElement.innerHTML
+      });
+    });
+    this.descriptionEditor.on('text-change', () => {
+      this.issueForm.patchValue({
+        description: this.descriptionEl.nativeElement.innerHTML
+      });
+    });
   }
+
   ngOnInit() {
+
 
     for (const flag in UrgencyFlag) {
       if (flag === UrgencyFlag.Important.toString()) {
@@ -139,7 +135,8 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
       } else if (flag === CompletionFlag.NotResolved.toString()) {
         this.completionFlags.push({value: CompletionFlag.NotResolved, label: 'Not Resolved'});
       }
-    };
+    }
+    ;
 
     // populate companies to show on dropdown
     this.companyService.getAllCompanies().subscribe(companies => {
@@ -180,16 +177,38 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
       }
     ];
   }
-  private getUsers(event): void {
-    this.userService.getAllUsersForCompany(event.value).subscribe(c => {
+
+  public getUsers(event): void {
+    this.userService.getAllUsersForCompany(event.value).subscribe(users => {
       this.users = [];
-      c.personDtos.forEach(person => {
-        this.users.push({label: `${person.firstName} ${person.lastName} (${person.email})`, value: person.id});
+      if (users) {
+        users.forEach(person => {
+          this.users.push({label: `${person.firstName} ${person.lastName} (${person.email})`, value: person.id});
+        });
+      }
+    });
+  }
+
+  public uploadBlob(files) {
+    console.log(files);
+  }
+
+  public submitForm() {
+    console.log(this.issueForm);
+  }
+
+  public stockResponseCheck(event) {
+    console.log(event);
+  }
+
+  public categoryChange(event) {
+    this.solutionsService.getStockResponsesForCategory(event.value).subscribe(solutions => {
+      this.solutionsForCurrentCategory = solutions;
+      this.stockResponses = [];
+      this.stockResponses.push({label: 'Select stock response', value: -1});
+      solutions.forEach(s => {
+        this.stockResponses.push({label: s.description, value: s.id});
       });
     });
   }
-  private uploadBlob(event) {
-    console.log(event.files);
-  }
-
 }

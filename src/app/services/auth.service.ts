@@ -14,7 +14,6 @@ export class AuthService {
       );
     } catch (e) {
       this.adalService.login();
-      this.getToken();
     };
   }
 
