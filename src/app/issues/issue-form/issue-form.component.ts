@@ -10,7 +10,8 @@ import * as Quill from 'quill';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {SolutionsService} from '../../services/solutions.service';
 import {SolutionDto} from '../../Models/solution-dto';
-import {FileUpload} from "primeng/components/fileupload/fileupload";
+import {FileUpload} from 'primeng/components/fileupload/fileupload';
+import {AzureService} from '../../services/azure.service';
 
 @Component({
   selector: 'app-issue-form',
@@ -19,13 +20,15 @@ import {FileUpload} from "primeng/components/fileupload/fileupload";
 })
 export class IssueFormComponent implements OnInit, AfterViewInit {
 
-
   @ViewChild('description') descriptionEl: ElementRef;
   @ViewChild('solution') solutionEl: ElementRef;
+  @ViewChild('tagEl') tagEl: ElementRef;
+  @ViewChild('relatedFiles') relatedFilesEl: ElementRef;
   @ViewChild('emailAttachments') emailAttachmentEl: FileUpload;
 
   private solutionsForCurrentCategory: SolutionDto[] = [];
 
+  // For dropdown list
   private items: Array<MenuItem>;
   private users: Array<SelectItem> = [];
   private companies: Array<SelectItem> = [];
@@ -35,6 +38,9 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
   private pslApplications: Array<SelectItem> = [];
   private urgnecyFlags: Array<SelectItem> = [];
   private stockResponses: Array<SelectItem> = [];
+  private tags: SelectItem[] = [];
+  private relatedfiles: FormData = new FormData();
+  private attachmentFiles: FormData = new FormData();
 
   private selectedCompany: string;
   private selectedUser: string;
@@ -44,18 +50,26 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
   private selectedPslApplication: string;
   private selectedUrgencyFlag: string;
   private selectedStockResponse: string;
+  // End for dropdown list info
 
+  // Editors
   private descriptionEditor: Quill.Quill;
   private solutionEditor: Quill.Quill;
-
+  //
   private issueForm: FormGroup;
+  private hideTags = true;
+
+  private observer: MutationObserver;
+  private tagsHeight: number;
 
   constructor(private categoryService: CategoryService,
               private companyService: CompanyService,
               private userService: UserService,
               private appService: ApplicationService,
               private solutionsService: SolutionsService,
+              private azure: AzureService,
               private fb: FormBuilder) {
+
     this.issueForm = this.fb.group({
       companyId: this.fb.control([]),
       usersId: this.fb.control([]),
@@ -64,10 +78,13 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
       psUser: this.fb.control([]),
       applications: this.fb.control([]),
       urgencyState: this.fb.control([]),
+      relatedFiles: this.fb.group(this.relatedfiles),
+      attachmentFiles: this.fb.group(new FormData()),
       isStockResponse: '',
       description: '',
       solution: ''
     });
+
   }
 
   ngAfterViewInit(): void {
@@ -88,10 +105,17 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
         description: this.descriptionEl.nativeElement.innerHTML
       });
     });
+
+    this.observer = new MutationObserver(() => {
+      this.tagsHeight = this.tagEl.nativeElement.clientHeight;
+    });
+    const config = { attributes: true, childList: true, characterData: true };
+    this.observer.observe(this.tagEl.nativeElement, config);
   }
 
   ngOnInit() {
 
+    console.log(this.relatedFilesEl);
 
     for (const flag in UrgencyFlag) {
       if (flag === UrgencyFlag.Important.toString()) {
@@ -191,6 +215,10 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
 
   public uploadBlob(files) {
     console.log(files);
+    this.relatedfiles.append(files['files'][0].name, files['files'][0]);
+  }
+  public attachFiles(files) {
+    this.attachmentFiles.append(files['files'][0].name, files['files'[0]]);
   }
 
   public submitForm() {
@@ -201,14 +229,16 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
     console.log(event);
   }
 
-  public categoryChange(event) {
+  public CategoryChange(event) {
     this.solutionsService.getStockResponsesForCategory(event.value).subscribe(solutions => {
+      this.hideTags = false;
       this.solutionsForCurrentCategory = solutions;
       this.stockResponses = [];
-      this.stockResponses.push({label: 'Select stock response', value: -1});
+      this.stockResponses.push({label: 'Select stock response', value: 'default'});
       solutions.forEach(s => {
         this.stockResponses.push({label: s.description, value: s.id});
       });
     });
   }
+
 }

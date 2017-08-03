@@ -17,6 +17,7 @@ import {CategoryService} from "./services/category.service";
 import {AuthService} from "./services/auth.service";
 import {ApplicationService} from "./services/application.service";
 import {SolutionsService} from "./services/solutions.service";
+import {AzureService} from "./services/azure.service";
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import {SolutionsService} from "./services/solutions.service";
     CategoryService,
     SolutionsService,
     AuthService,
+    AzureService,
     ApplicationService
   ],
   bootstrap: [AppComponent]
