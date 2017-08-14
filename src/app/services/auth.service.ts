@@ -20,6 +20,9 @@ export class AuthService {
             observer.next(token);
             observer.complete();
 
+          }, t => {
+            this.adalService.login();
+            this.adalService.handleWindowCallback();
           });
         } else {
           observer.next(token);

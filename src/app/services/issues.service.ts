@@ -41,4 +41,16 @@ export class IssuesService {
     });
     return this.issueSubject;
   }
+  public addIssue(o) {
+    this.authService.getToken().toPromise().then( t => {
+      this.http.post(`${this.baseUrl}/v1/issues`, {
+        issue: JSON.stringify(o)
+      }, {
+        headers: new Headers({'Authorization': `Bearer ${t.toString()}`})
+      }).toPromise()
+        .then(res => {
+          console.log(res.json());
+        });
+    });
+  }
 }

@@ -12,6 +12,7 @@ import {SolutionsService} from '../../services/solutions.service';
 import {SolutionDto} from '../../Models/solution-dto';
 import {FileUpload} from 'primeng/components/fileupload/fileupload';
 import {AzureService} from '../../services/azure.service';
+import {IssuesService} from "../../services/issues.service";
 
 @Component({
   selector: 'app-issue-form',
@@ -64,6 +65,7 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
 
   constructor(private categoryService: CategoryService,
               private companyService: CompanyService,
+              private issueService: IssuesService,
               private userService: UserService,
               private appService: ApplicationService,
               private solutionsService: SolutionsService,
@@ -79,7 +81,7 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
       applications: this.fb.control([]),
       urgencyState: this.fb.control([]),
       relatedFiles: this.fb.group(this.relatedfiles),
-      attachmentFiles: this.fb.group(new FormData()),
+      attachmentFiles: this.fb.group(this.attachmentFiles),
       isStockResponse: '',
       description: '',
       solution: ''
@@ -214,7 +216,6 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
   }
 
   public uploadBlob(files) {
-    console.log(files);
     this.relatedfiles.append(files['files'][0].name, files['files'][0]);
   }
   public attachFiles(files) {
@@ -222,7 +223,7 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
   }
 
   public submitForm() {
-    console.log(this.issueForm);
+    this.issueService.addIssue(this.issueForm.value);
   }
 
   public stockResponseCheck(event) {
