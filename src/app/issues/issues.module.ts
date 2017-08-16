@@ -18,7 +18,7 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     FormsModule,
     BrowserAnimationsModule,
     MultiSelectModule,
-    FileUploadModule
+    FileUploadModule,
   ],
   declarations: [IssuesComponent, IssueFormComponent],
   exports: [

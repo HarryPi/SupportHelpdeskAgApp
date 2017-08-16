@@ -41,12 +41,13 @@ export class IssuesService {
     });
     return this.issueSubject;
   }
-  public addIssue(o) {
+  public addIssue(issue) {
+    const headers = new Headers();
     this.authService.getToken().toPromise().then( t => {
-      this.http.post(`${this.baseUrl}/v1/issues`, {
-        issue: JSON.stringify(o)
-      }, {
-        headers: new Headers({'Authorization': `Bearer ${t.toString()}`})
+      headers.append('Authorization', `Bearer ${t.toString()}`);
+      headers.append('Content-Type', 'application/json')
+      this.http.post(`${this.baseUrl}/v1/issues`, issue, {
+        headers: headers
       }).toPromise()
         .then(res => {
           console.log(res.json());

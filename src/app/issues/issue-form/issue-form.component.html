@@ -73,16 +73,17 @@
 
       </div>
     </div>
-    <div class="ui-g-12">
+    <div class="ui-g-12" >
       <div class="ui-g-4">Upload related files</div>
       <br>
       <br>
       <p-fileUpload
-        name="relevantFiles[]"
-        customUpload="true"
-        multiple="multiple"
-        (uploadHandler)="uploadBlob($event)">
         #relatedFiles
+        [showUploadButton]="false"
+        customUpload = true
+        (uploadHandler)="uploadBlob($event)">
+        name="relevantFiles[]"
+       >
       </p-fileUpload>
       <ul class="list-group">
 
@@ -158,8 +159,9 @@
       <p-fileUpload #emailAttachments
                     name="attachments[]"
                     customUpload="true"
+                    multiple='multiple'
+                    [showUploadButton]="false"
                     (uploadHandler)="attachFiles($event)">
-
       </p-fileUpload>
     </div>
   </div>

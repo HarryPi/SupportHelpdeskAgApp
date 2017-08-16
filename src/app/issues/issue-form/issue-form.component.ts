@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {MenuItem, SelectItem} from 'primeng/primeng';
+import {FileUpload, MenuItem, SelectItem} from 'primeng/primeng';
 import {CompanyService} from '../../services/company.service';
 import {UserService} from '../../services/user.service';
 import {CompletionFlag} from '../../Models/completion-flag.enum';
@@ -10,9 +10,8 @@ import * as Quill from 'quill';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {SolutionsService} from '../../services/solutions.service';
 import {SolutionDto} from '../../Models/solution-dto';
-import {FileUpload} from 'primeng/components/fileupload/fileupload';
 import {AzureService} from '../../services/azure.service';
-import {IssuesService} from "../../services/issues.service";
+import {IssuesService} from '../../services/issues.service';
 
 @Component({
   selector: 'app-issue-form',
@@ -24,8 +23,9 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
   @ViewChild('description') descriptionEl: ElementRef;
   @ViewChild('solution') solutionEl: ElementRef;
   @ViewChild('tagEl') tagEl: ElementRef;
-  @ViewChild('relatedFiles') relatedFilesEl: ElementRef;
-  @ViewChild('emailAttachments') emailAttachmentEl: FileUpload;
+
+  @ViewChild('relatedFiles') relatedFilesEl: FileUpload;
+  @ViewChild('emailAttachments') emailAttachmentsEl: FileUpload;
 
   private solutionsForCurrentCategory: SolutionDto[] = [];
 
@@ -40,8 +40,6 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
   private urgnecyFlags: Array<SelectItem> = [];
   private stockResponses: Array<SelectItem> = [];
   private tags: SelectItem[] = [];
-  private relatedfiles: FormData = new FormData();
-  private attachmentFiles: FormData = new FormData();
 
   private selectedCompany: string;
   private selectedUser: string;
@@ -59,6 +57,9 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
   //
   private issueForm: FormGroup;
   private hideTags = true;
+
+  private emailAttachments: File[] = [];
+  private blobAttachments: File[] = [];
 
   private observer: MutationObserver;
   private tagsHeight: number;
@@ -80,8 +81,6 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
       psUser: this.fb.control([]),
       applications: this.fb.control([]),
       urgencyState: this.fb.control([]),
-      relatedFiles: this.fb.group(this.relatedfiles),
-      attachmentFiles: this.fb.group(this.attachmentFiles),
       isStockResponse: '',
       description: '',
       solution: ''
@@ -116,8 +115,6 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-
-    console.log(this.relatedFilesEl);
 
     for (const flag in UrgencyFlag) {
       if (flag === UrgencyFlag.Important.toString()) {
@@ -216,10 +213,11 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
   }
 
   public uploadBlob(files) {
-    this.relatedfiles.append(files['files'][0].name, files['files'][0]);
+
   }
+
   public attachFiles(files) {
-    this.attachmentFiles.append(files['files'][0].name, files['files'[0]]);
+
   }
 
   public submitForm() {
