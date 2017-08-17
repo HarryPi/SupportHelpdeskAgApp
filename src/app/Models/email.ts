@@ -1,4 +1,4 @@
-export class EmailDto {
+export class Email {
 
   users: Array<string>;
   userNames: Array<string>;

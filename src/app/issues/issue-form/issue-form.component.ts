@@ -9,9 +9,12 @@ import {UrgencyFlag} from '../../Models/urgency-flag.enum';
 import * as Quill from 'quill';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {SolutionsService} from '../../services/solutions.service';
-import {SolutionDto} from '../../Models/solution-dto';
+import {Solution} from '../../Models/solution';
 import {AzureService} from '../../services/azure.service';
 import {IssuesService} from '../../services/issues.service';
+import {Issue} from '../../Models/issue';
+import {Person} from '../../Models/person';
+import {PslApplication} from '../../Models/psl-application';
 
 @Component({
   selector: 'app-issue-form',
@@ -27,7 +30,7 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
   @ViewChild('relatedFiles') relatedFilesEl: FileUpload;
   @ViewChild('emailAttachments') emailAttachmentsEl: FileUpload;
 
-  private solutionsForCurrentCategory: SolutionDto[] = [];
+  private solutionsForCurrentCategory: Solution[] = [];
 
   // For dropdown list
   private items: Array<MenuItem>;
@@ -221,7 +224,9 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
   }
 
   public submitForm() {
-    this.issueService.addIssue(this.issueForm.value);
+   const issue = this.mapFormToIssue(this.issueForm);
+
+    this.issueService.addIssue(issue);
   }
 
   public stockResponseCheck(event) {
@@ -240,4 +245,39 @@ export class IssueFormComponent implements OnInit, AfterViewInit {
     });
   }
 
+  private mapFormToIssue(form: FormGroup): Issue {
+    const issue = new Issue();
+    issue.persons = function (): Person[] {
+      const persons = Array<Person>();
+      form.value.usersId.forEach(u => {
+        const person = new Person();
+        person.id = u;
+        persons.push(person);
+      });
+      return persons;
+    }();
+    issue.companyId = form.value.companyId;
+    issue.description = form.value.description;
+    issue.solution = form.value.solution;
+    issue.categorieId = form.value.categoryId;
+    issue.completionFlag = form.value.completionFlag;
+    issue.issuePslApplications = function (): PslApplication[] {
+      const apps = [];
+      form.value.applications.forEach(a => {
+        const app = new PslApplication();
+        app.id = a;
+        apps.push(app);
+      });
+      return apps;
+    }();
+    issue.psUserId = form.value.psUser;
+    issue.note = form.value.note;
+    issue.urgencyFlag = form.value.urgencyState;
+
+    const solution = new Solution();
+    solution.text = form.value.solution;
+    solution.categoryId = form.value.categoryId;
+    issue.solution = solution;
+    return issue;
+  }
 }

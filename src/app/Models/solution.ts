@@ -1,4 +1,4 @@
-export class SolutionDto {
+export class Solution {
   id: number;
   description: string;
   text: string;

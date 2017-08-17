@@ -1,4 +1,4 @@
-export class PslApplicationDto {
+export class PslApplication {
   id: number;
   application: string;
 }

@@ -1,6 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {IssuesService} from "../services/issues.service";
-import {IssueDto} from "../Models/issue-dto";
+import {Issue} from "../Models/issue";
 import {CompletionFlag} from "../Models/completion-flag.enum";
 import {Router} from "@angular/router";
 
@@ -11,7 +11,7 @@ import {Router} from "@angular/router";
 })
 export class IssuesComponent implements OnInit {
 
-  issues: IssueDto[] = [];
+  issues: Issue[] = [];
   loading = false;
   completionFlag = CompletionFlag;
   constructor(private issueService: IssuesService, private router: Router) {

@@ -1,19 +1,19 @@
 import {Injectable} from '@angular/core';
 import {Headers, Http} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import {IssueDto} from '../Models/issue-dto';
+import {Issue} from '../Models/issue';
 import {AuthService} from './auth.service';
 import {AdalService} from 'ng2-adal/core';
 import {Subject} from 'rxjs/Subject';
 
 @Injectable()
 export class IssuesService {
-  private issueSubject: Subject<IssueDto[]> = new Subject();
+  private issueSubject: Subject<Issue[]> = new Subject();
   private baseUrl = 'https://localhost:44318/api';
   constructor(private http: Http, private authService: AuthService, private adalService: AdalService) {
   }
 
-  public onGoingIssues(): Subject<IssueDto[]> {
+  public onGoingIssues(): Subject<Issue[]> {
 
     this.authService.getToken().toPromise().then(t => {
 
@@ -30,7 +30,7 @@ export class IssuesService {
     return this.issueSubject;
   }
 
-  public myIssues(): Subject<IssueDto[]> {
+  public myIssues(): Subject<Issue[]> {
     this.authService.getToken().toPromise().then(t => {
       this.http.get(`https://helpdesk.presentationsolutions.euapi/Issues/GetIssuesByFlag/32?psUserEmail=${this.adalService.userInfo.userName}`, {
         headers: new Headers({'Authorization': `Bearer ${t.toString()}`})
@@ -44,10 +44,13 @@ export class IssuesService {
   public addIssue(issue) {
     const headers = new Headers();
     this.authService.getToken().toPromise().then( t => {
+
       headers.append('Authorization', `Bearer ${t.toString()}`);
-      headers.append('Content-Type', 'application/json')
-      this.http.post(`${this.baseUrl}/v1/issues`, issue, {
-        headers: headers
+      headers.append('Content-Type', 'application/json');
+
+      this.http.post(`${this.baseUrl}/v1/issues`, JSON.stringify(issue), {
+        headers: headers,
+        withCredentials: true
       }).toPromise()
         .then(res => {
           console.log(res.json());

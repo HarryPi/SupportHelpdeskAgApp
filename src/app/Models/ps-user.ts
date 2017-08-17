@@ -1,9 +1,10 @@
-import {IssueDto} from "./issue-dto";
-export class PsUserDto {
+import {Issue} from "./issue";
+
+export class PsUser {
   id: number;
   firstName: string;
   lastName: string;
   email: string;
   note: string;
-  issues: Array<IssueDto>;
+  issues: Array<Issue>;
 }
